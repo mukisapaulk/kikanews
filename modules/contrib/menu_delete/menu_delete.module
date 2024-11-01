@@ -1,0 +1,84 @@
+<?php
+
+/**
+ * @file
+ * Contains menu_delete.module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function menu_delete_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.menu_delete':
+      $output = '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Easily delete multiple menu items at a time.') . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function menu_delete_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form['#form_id'] == 'menu_edit_form') {
+    $form['links']['links']['#header'][] = [
+      'data' => t('Delete'),
+      'class' => ['checkbox'],
+    ];
+
+    foreach (Element::children($form['links']['links']) as $id) {
+      $form['links']['links'][$id]['delete'] = [];
+      // Add a checkbox to all menu items that can be deleted.
+      if ($form['links']['links'][$id]['#item']->link->isDeletable()) {
+        $form['links']['links'][$id]['delete'] = [
+          '#type' => 'checkbox',
+          '#title' => t('Delete'),
+          '#title_display' => 'invisible',
+          '#default_value' => FALSE,
+          '#wrapper_attributes' => [
+            'class' => ['checkbox', 'menu-delete'],
+          ],
+        ];
+      }
+    }
+
+    $form['actions']['delete_selected'] = [
+      '#type' => 'submit',
+      '#value' => t('Delete selected'),
+      '#button_type' => 'secondary',
+      '#weight' => 10,
+      '#submit' => ['menu_delete_edit_form_submit'],
+      '#name' => 'menu_delete',
+    ];
+  }
+}
+
+/**
+ * Form submit handler.
+ */
+function menu_delete_edit_form_submit($form, FormStateInterface $form_state) {
+  $items = [];
+  foreach ($form_state->getValues()['links'] as $id => $link) {
+    if (isset($link['delete']) && $link['delete'] == TRUE) {
+      $items[$id] = $link;
+    }
+  }
+
+  if (count($items) > 0) {
+    $store = [
+      'menu_id' => $form['id']['#default_value'],
+      'items' => $items,
+    ];
+    $temp_store = \Drupal::service('tempstore.private')->get('menu_delete_item_confirm');
+    $temp_store->set(\Drupal::service('current_user')->id(), $store);
+
+    $menu_id = $form_state->getValues()['id'];
+    \Drupal::request()->query->remove('destination');
+    $form_state->setRedirect('menu_delete.multiple_delete_confirm', ['menu' => $menu_id]);
+  }
+}

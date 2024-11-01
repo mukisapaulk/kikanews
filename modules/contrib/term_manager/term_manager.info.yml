@@ -1,0 +1,12 @@
+name: Term Manager
+description: Manage Term, move Term to another Vocabulary for better Taxonomy.
+package: Taxonomy
+type: module
+core_version_requirement: ^8 || ^9 || ^10
+dependencies:
+# project: 'term_manager'
+
+# Information added by Drupal.org packaging script on 2023-04-07
+version: '1.0.0-beta1'
+project: 'term_manager'
+datestamp: 1680841795

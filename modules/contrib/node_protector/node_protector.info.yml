@@ -1,0 +1,13 @@
+name: Node Protector
+description: Protect node from Delete.
+package: Administration
+type: module
+core_version_requirement: ^8 || ^9 || ^10
+dependencies:
+# version: '1.0.2'
+# project: 'node_protector'
+
+# Information added by Drupal.org packaging script on 2023-05-21
+version: '1.0.4'
+project: 'node_protector'
+datestamp: 1684635367

@@ -1,0 +1,11 @@
+name: Simple Slideshow
+type: module
+description: 'Creates a field formatter for image field, for which that particular field will be rendered as a basic slideshow.'
+core_version_requirement: ^8 || ^9 || ^10
+package: Field
+dependencies:
+  - drupal:image
+# Information added by Drupal.org packaging script on 2023-06-13
+version: '1.0.5'
+project: 'simple_slideshow'
+datestamp: 1686666248

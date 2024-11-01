@@ -1,0 +1,16 @@
+node_protector.page:
+  path: '/node_protector/home'
+  defaults:
+    _controller: '\Drupal\node_protector\Controller\NodeProtectorController::home'
+    _title: 'Node Protector Test Page'
+  requirements:
+    _permission: 'access content'
+
+
+node_protector.settings:
+  path: '/admin/config/system/node_protector/settings'
+  defaults:
+    _title: 'Node Protector Settings'
+    _form: 'Drupal\node_protector\Form\NodeProtectorSettingsForm'
+  requirements:
+    _permission: 'administer site configuration'

@@ -1,0 +1,51 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a formatted simple_slideshow field.
+ *
+ * Available variables:
+ * - image: A collection of image data.
+ * - image_style: An optional image style.
+ * - url: An optional URL the image can be linked to.
+ *
+ * @see template_preprocess_image_formatter()
+ *
+ * @ingroup themeable
+ */
+#}
+
+<div class="simple_slideshow-wrapper">
+    <div class="splide" data-splide='{  "type":"{{ simple_slideshow_type }}",
+                                        "autoplay":{{ simple_slideshow_autoplay }},
+                                        "rewind":{{ simple_slideshow_rewind }},
+                                        "speed":{{ simple_slideshow_speed }},
+                                        "start":{{ simple_slideshow_start }},
+                                        "perPage":{{ simple_slideshow_perpage }},
+                                        "perMove":{{ simple_slideshow_permove }},
+                                        "gap":"{{ simple_slideshow_gap }}",
+                                        "padding":"{{ simple_slideshow_padding }}",
+                                        "arrows":{{ simple_slideshow_arrows }},
+                                        "pagination":{{ simple_slideshow_pagination }},
+                                        "arrowPath":"{{ simple_slideshow_arrowpath }}",
+                                        "pauseOnHover":{{ simple_slideshow_pausehover }},
+                                        "lazyLoad":{{ simple_slideshow_lazyload }},
+                                        "direction":"{{ simple_slideshow_direction }}"
+                                     }'>
+        <div class="splide__track">
+            
+    		<ul class="splide__list coba {{ image_alt }}">
+    		    
+            {% for key,value in url %}
+                {% set image_alt = value.alt %}
+                {% if simple_slideshow_linkimgalt == 'linkimgalt' and image_alt != '' %}
+                    <li class="splide__slide"><a href="{{ value.alt }}"><img title="{{ value.title }}" alt="{{ value.alt }}" src="{{ value.uri }}" onclick="window.open('{{ value.alt }}', '_self')" /></a></li>
+                {% elseif simple_slideshow_linkimgalt == 'file' %}
+                    <li class="splide__slide"><img title="{{ value.title }}" alt="{{ value.alt }}" src="{{ value.uri }}" onclick="window.open('{{ value.uri }}', '_self')" /></li>
+                {% else %}
+                    <li class="splide__slide"><img title="{{ value.title }}" alt="{{ value.alt }}" src="{{ value.uri }}" /></li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>

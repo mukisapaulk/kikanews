@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * @file
+ * Simple  Slideshow module file.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function simple_slideshow_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the simple_slideshow module.
+    case 'help.page.simple_slideshow':
+      $output = '';
+      $output .= '<h3>' . t('Simple Slideshow') . '</h3>';
+      $output .= '<p>' . t('Simple Slideshow will provide a field formatter, so that the images uploaded for an image field would be rendered as a Slideshow.') . '</p>';
+      $output .= '<p>' . t('Visit module page for more details.') . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function simple_slideshow_theme() {
+  return [
+    'simple_slideshow' => [
+      'variables' => [
+        'url' => NULL,
+        'simple_slideshow_type'       => "slide",
+        'simple_slideshow_autoplay'   => true,
+        'simple_slideshow_rewind'     => true,
+        'simple_slideshow_speed'      => 400,
+        'simple_slideshow_start'      => 0,
+        'simple_slideshow_perpage'    => 1,
+        'simple_slideshow_permove'    => 1,
+        'simple_slideshow_gap'        => 1,
+        'simple_slideshow_padding'    => NULL,
+        'simple_slideshow_arrows'     => true,
+        'simple_slideshow_pagination' => true,
+        'simple_slideshow_arrowpath'  => NULL,
+        'simple_slideshow_pausehover' => true,
+        'simple_slideshow_lazyload'   => true,
+        'simple_slideshow_direction'  => "ltr",
+        'simple_slideshow_linkimgalt' => "",
+      ],
+    ],
+  ];
+}

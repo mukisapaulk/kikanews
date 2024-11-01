@@ -1,0 +1,32 @@
+term_manager.page:
+  path: '/term_manager/home'
+  defaults:
+    _controller: '\Drupal\term_manager\Controller\TermManagerController::home'
+    _title: 'Term Manager Test Page'
+  requirements:
+    _permission: 'access content'
+
+
+term_manager.settings:
+  path: '/admin/config/user-interface/term_manager/settings'
+  defaults:
+    _title: 'Term Manager Settings'
+    _form: 'Drupal\term_manager\Form\TermManagerSettingsForm'
+  requirements:
+    _permission: 'administer site configuration'
+    
+term_manager.admin:
+  path: '/admin/structure/term_manager'
+  defaults:
+    _controller: '\Drupal\term_manager\Controller\TermManagerController::home'
+    _title: 'Term Manager'
+  requirements:
+    _permission: 'administer site configuration'
+    
+term_manager.move:
+  path: '/admin/structure/term_manager/move'
+  defaults:
+    _title: 'Term Manager: Move to another Vocabulary'
+    _form: 'Drupal\term_manager\Form\TermManagerMoveForm'
+  requirements:
+    _permission: 'administer site configuration'    

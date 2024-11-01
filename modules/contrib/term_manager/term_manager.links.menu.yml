@@ -1,0 +1,17 @@
+term_manager.settings:
+  title: 'Term Manager Settings'
+  description: 'Configure the Term_ Manager module.'
+  route_name: term_manager.settings
+  parent: system.admin_config_ui
+
+term_manager.admin:
+  title: 'Term manager'
+  description: 'Term Manager: Move Term to another Vocabulary, Merge Term, etc.'
+  parent: system.admin_structure
+  route_name: term_manager.admin
+
+term_manager.move:
+  title: 'Move to new Vocabulary'
+  description: 'Term Manager: Move Term to another Vocabulary, Merge Term, etc.'
+  parent: term_manager.admin
+  route_name: term_manager.move

@@ -1,0 +1,42 @@
+<?php
+use Drupal\node\NodeInterface;
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+# use Drupal\Core\Entity\EntityInterface;
+# use Drupal\Core\Config\ConfigFactoryInterface;
+# use Drupal\Core\Access\AccessResult;
+# use Drupal\Core\Routing\UrlGeneratorTrait;
+# use \Drupal\Core\Routing\TrustedRedirectResponse;
+# use Drupal\Core\Controller\ControllerBase;
+
+/**
+ * Implements hook_ENTITY_TYPE_predelete() for node.
+ */
+
+function node_protector_node_predelete(NodeInterface $node) {
+  
+  $node_protector_now       = $node->id(); 
+  $node_protector_nid       = \Drupal::config('node_protector.settings')->get('node_protector_nid');
+  $node_protector_auto      = \Drupal::config('node_protector.settings')->get('node_protector_auto');
+  $node_protector_frontpage = \Drupal::config('system.site')->get('page.front');
+ 
+  if ($node_protector_auto) {
+    $node_protector_frontid = substr($node_protector_frontpage, 6);
+    $node_protector_protect = 0;
+    if ($node_protector_now == $node_protector_frontid) {
+        $node_protector_protect = 1;
+    }
+  } 
+  
+  if (($node_protector_now == $node_protector_nid) || $node_protector_protect){
+    $message = "Sorry, this NID $node_protector_now is protected by Node Protector from DELETING!";
+    \Drupal::messenger()->addWarning($message);  
+
+    $url = Url::fromRoute('entity.node.canonical', ['node' => $node_protector_now]);
+    $redirect = new RedirectResponse($url->toString());
+    $redirect->send();
+    
+    exit; // not used but for safety
+  }
+}

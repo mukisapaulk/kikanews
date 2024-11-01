@@ -1,0 +1,26 @@
+{
+  "name": "drupal/menu_delete",
+  "description": "Easily delete multiple menu items at a time.",
+  "type": "drupal-module",
+  "license": "GPL-2.0-or-later",
+  "keywords": ["Drupal"],
+  "homepage": "https://www.drupal.org/project/menu_delete",
+  "authors": [
+    {
+      "name": "Rob Decker (rrrob)",
+      "homepage": "https://www.drupal.org/u/rrrob",
+      "role": "Maintainer"
+    },
+    {
+      "name": "Viktor Holovachek (AstonVictor)",
+      "homepage": "https://www.drupal.org/u/astonvictor",
+      "role": "Maintainer"
+    }
+  ],
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/menu_delete",
+    "source": "https://git.drupalcode.org/project/menu_delete"
+  },
+  "require": {  }
+}

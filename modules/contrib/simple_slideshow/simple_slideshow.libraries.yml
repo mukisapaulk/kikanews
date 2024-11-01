@@ -1,0 +1,9 @@
+simple_slideshow:
+  version: 1.x
+  js:
+    /libraries/splide/dist/js/splide.min.js: {}
+    js/simple_slideshow.js: {}
+  css:
+    theme:
+      /libraries/splide/dist/css/themes/splide-skyblue.min.css: {}
+      css/simple_slideshow.css: {}
