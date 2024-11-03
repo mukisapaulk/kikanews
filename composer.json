@@ -24,6 +24,7 @@
         "drupal/core-recommended": "10.3.6",
         "drupal/core-vendor-hardening": "^9.2",
         "drupal/ctools": "^4.0",
+        "drupal/dempo": "^4.0",
         "drupal/devel": "^5.1",
         "drupal/fontawesome": "^2.19",
         "drupal/fontawesome_menu_icons": "^3.0",
@@ -46,7 +47,7 @@
         "drupal/upgrade_status": "^4.0",
         "drupal/view_custom_table": "^2.0",
         "drupal/views_bootstrap": "^5.5@alpha",
-        "drush/drush": "^12.4"
+        "drush/drush": "^12.5"
     },
     "conflict": {
         "drupal/drupal": "*"
