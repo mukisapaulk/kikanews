@@ -6,10 +6,11 @@ views.filter_value.mysql_date:
     type: views.filter_value.date
 
 view_custom_table.tables:
-  type: sequence
+  type: config_object
   label: 'Custom Table'
-  sequence:
-    type: view_custom_table.tables.[%key]
+  mapping:
+    config_value:
+      type: view_custom_table.tables.[%key]
 
 view_custom_table.tables.langcode:
   type: string

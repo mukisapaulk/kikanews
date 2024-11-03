@@ -119,7 +119,7 @@ class EditTableRelations extends FormBase {
       'bigint'
     ];
     $connection = Database::getConnection('default', $config[$table_name]['table_database']);
-    $text_query = 'DESCRIBE ' . $connection->tablePrefix($table_name) . $connection->escapeTable($table_name);
+    $text_query = 'DESCRIBE ' . $connection->getPrefix() . $connection->escapeTable($table_name);
     $query = $connection->query($text_query);
     foreach ($query as $row) {
       $row_type = explode('(', $row->Type);
@@ -166,6 +166,9 @@ class EditTableRelations extends FormBase {
     $form['actions']['cancel'] = [
       '#type' => 'link',
       '#title' => $this->t('Cancel'),
+      '#attributes' => [
+        'class' => ['button', 'button--cancel'],
+      ],
       '#url' => $this->buildCancelLinkUrl(),
     ];
 

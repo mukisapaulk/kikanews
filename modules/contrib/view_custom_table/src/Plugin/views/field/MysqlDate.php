@@ -2,6 +2,7 @@
 
 namespace Drupal\view_custom_table\Plugin\views\field;
 
+use Drupal\Core\Datetime\TimeZoneFormHelper;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\ResultRow;
@@ -134,7 +135,7 @@ class MysqlDate extends FieldPluginBase implements ContainerFactoryPluginInterfa
       '#type' => 'select',
       '#title' => $this->t('Timezone'),
       '#description' => $this->t('Timezone to be used for date output.'),
-      '#options' => ['' => $this->t('- Default site/user timezone -')] + system_time_zones(FALSE, TRUE),
+      '#options' => ['' => $this->t('- Default site/user timezone -')] + TimeZoneFormHelper::getOptionsListByRegion(),
       '#default_value' => $this->options['timezone'],
     ];
     foreach (array_merge(['custom'], array_keys($date_formats)) as $timezone_date_formats) {

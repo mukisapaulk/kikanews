@@ -105,6 +105,9 @@ class RemoveViewsCustomTable extends FormBase {
     $form['actions']['cancel'] = [
       '#type' => 'link',
       '#title' => $this->t('Cancel'),
+      '#attributes' => [
+        'class' => ['button', 'button--cancel'],
+      ],
       '#url' => $this->buildCancelLinkUrl(),
     ];
 

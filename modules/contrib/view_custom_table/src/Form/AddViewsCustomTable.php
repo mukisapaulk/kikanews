@@ -18,6 +18,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
  * Add views custom table form.
  */
 class AddViewsCustomTable extends FormBase {
+
   /**
    * Step of the form.
    *
@@ -133,13 +134,18 @@ class AddViewsCustomTable extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     if ($this->step == 1) {
       $all_database_connections = Database::getAllConnectionInfo();
-      foreach ($all_database_connections as $connection_name => $connection) {
-        $displyName = $connection['default']['database'];
-        $databaseOptions[$connection_name] = $displyName;
+      $database_options = [];
+      foreach ($all_database_connections as $db_driver => $connections) {
+        foreach ($connections as $connection_name => $connection) {
+          // Some connections don't have database key for example sparql.
+          if (!empty($connection['database'])) {
+            $database_options[$db_driver][$connection_name] = $connection_name . ' (' . $connection['database'] . ')';
+          }
+        }
       }
       $form['table_database'] = [
         '#type' => 'select',
-        '#options' => $databaseOptions,
+        '#options' => $database_options,
         '#title' => $this->t('Database'),
       ];
       $form['table_name'] = [
@@ -164,7 +170,7 @@ class AddViewsCustomTable extends FormBase {
     }
     elseif ($this->step == 2) {
       $table_name = $this->previousStepData['table_name'];
-      $databaseName = $this->previousStepData['table_database'];
+      $database_name = $this->previousStepData['table_database'];
       $form['columns'] = [
         '#type' => 'fieldset',
         '#title' => $this->t('"@table" Int Type Columns', [
@@ -173,7 +179,7 @@ class AddViewsCustomTable extends FormBase {
         '#tree' => TRUE,
       ];
       $entities['none'] = $this->t('None');
-      if ($databaseName == 'default') {
+      if ($database_name == 'default') {
         $all_entities = $this->entityManager->getDefinitions();
         foreach ($all_entities as $entity_name => $entity) {
           if ($entity->getBaseTable()) {
@@ -189,7 +195,7 @@ class AddViewsCustomTable extends FormBase {
       $all_custom_tables = $this->config->getRawData();
       if (!empty($all_custom_tables)) {
         foreach ($all_custom_tables as $custom_table) {
-          if (($custom_table['table_database'] == $databaseName) && $custom_table['table_name'] != $table_name) {
+          if (($custom_table['table_database'] == $database_name) && $custom_table['table_name'] != $table_name) {
             $entities[$custom_table['table_name']] = $custom_table['table_name'];
           }
         }
@@ -202,8 +208,8 @@ class AddViewsCustomTable extends FormBase {
         'bigint',
         'varchar',
       ];
-      $connection = Database::getConnection('default', $databaseName);
-      $text_query = 'DESCRIBE ' . $connection->tablePrefix($table_name) . $connection->escapeTable($table_name);
+      $connection = Database::getConnection('default', $database_name);
+      $text_query = 'DESCRIBE ' . $connection->getPrefix() . $connection->escapeTable($table_name);
       $query = $connection->query($text_query);
       foreach ($query as $row) {
         $row_type = explode('(', $row->Type);
@@ -239,6 +245,9 @@ class AddViewsCustomTable extends FormBase {
     $form['actions']['cancel'] = [
       '#type' => 'link',
       '#title' => $this->t('Cancel'),
+      '#attributes' => [
+        'class' => ['button', 'button--cancel'],
+      ],
       '#url' => $this->buildCancelLinkUrl(),
     ];
 
@@ -250,18 +259,18 @@ class AddViewsCustomTable extends FormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     if ($this->step == 1) {
-      $databaseName = $form_state->getValue('table_database');
+      $database_name = $form_state->getValue('table_database');
       $table_name = $form_state->getValue('table_name');
       $description = $form_state->getValue('description');
-      $connection = Database::getConnection('default', $databaseName);
+      $connection = Database::getConnection('default', $database_name);
       if (!$connection->schema()->tableExists($table_name)) {
         $form_state->setErrorByName('table_name', $this->t('@table not found in database @database_name, please check table name, and database again.', [
           '@table' => $table_name,
-          '@database_name' => $databaseName,
+          '@database_name' => $database_name,
         ]));
       }
       $config = $this->config->getRawData();
-      if (isset($config[$table_name]) && $config[$table_name]['table_database'] == $databaseName) {
+      if (isset($config[$table_name]) && $config[$table_name]['table_database'] == $database_name) {
         $form_state->setErrorByName('table_name', $this->t("@table is already available for views. If you can't find it, please clear cache and try again.", [
           '@table' => $table_name,
         ]));
@@ -278,13 +287,13 @@ class AddViewsCustomTable extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $opeation = $form_state->getValue('op')->render();
-    if ($opeation == $this->t('Next')) {
+    $operation = $form_state->getValue('op')->render();
+    if ($operation == $this->t('Next')) {
       $this->previousStepData = $form_state->cleanValues()->getValues();
       $form_state->setRebuild();
       $this->step++;
     }
-    if ($opeation == $this->t('Save')) {
+    if ($operation == $this->t('Save')) {
       $user = $this->account;
       $table_name = $this->previousStepData['table_name'];
       $table_database = $this->previousStepData['table_database'];

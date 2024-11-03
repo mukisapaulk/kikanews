@@ -663,6 +663,7 @@ $settings['update_free_access'] = FALSE;
  */
 # $settings['maintenance_theme'] = 'claro';
 
+
 /**
  * PHP settings:
  *
